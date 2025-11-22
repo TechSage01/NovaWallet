@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal - NovaWallet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* General Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 200px);
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #2d3436;
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #ffeaa7;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: 0.2s background;
+    }
+
+    .sidebar ul li.active,
+    .sidebar ul li:hover {
+      background-color: #6c5ce7;
+    }
+
+    /* Main dashboard */
+    main#dashboard {
+      flex: 1;
+    }
+
+    /* Cards */
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      flex: 1;
+      min-width: 200px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #636e72;
+    }
+
+    .card .amount {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #2d3436;
+    }
+
+    /* Analytics */
+    .analytics {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    .analytics h2 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #2d3436;
+    }
+
+    .analytics-box {
+      height: 200px;
+      background-color: #dfe6e9;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #636e72;
+      font-weight: 600;
+    }
+
+    /* Transactions */
+    .transactions {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      overflow-x: auto;
+    }
+
+    .transactions h2 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #2d3436;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table thead {
+      background-color: #6c5ce7;
+      color: white;
+    }
+
+    table thead th {
+      padding: 12px;
+      text-align: left;
+    }
+
+    table tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .minus {
+      color: #d63031;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .cards {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
+
+      .sidebar ul {
+        display: flex;
+        gap: 15px;
+      }
+
+      .sidebar ul li {
+        flex: 1;
+        text-align: center;
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Manage Your Money Smarter</h1>
+    <p>Track your spending, save efficiently, and make secure transfers with NovaWallet Personal.</p>
+  </section>
+
+  <!-- SIDEBAR + DASHBOARD WRAPPER -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2>NovaWallet</h2>
+      <ul>
+        <li class="active">Dashboard</li>
+        <li>Transactions</li>
+        <li>Analytics</li>
+        <li>Settings</li>
+      </ul>
+    </aside>
+
+    <!-- MAIN DASHBOARD -->
+    <main id="dashboard">
+
+      <!-- DASHBOARD CARDS -->
+      <section class="cards">
+        <div class="card balance">
+          <h3>Wallet Balance</h3>
+          <p class="amount" id="balance"></p>
+        </div>
+        <div class="card income">
+          <h3>Total Income</h3>
+          <p class="amount" id="totalIncome"></p>
+        </div>
+        <div class="card expenses">
+          <h3>Total Expenses</h3>
+          <p class="amount" id="totalExpenses"></p>
+        </div>
+      </section>
+
+      <!-- ANALYTICS SECTION -->
+      <section class="analytics">
+        <h2>Spending Overview</h2>
+        <div class="analytics-box">Chart or graph can go here</div>
+      </section>
+
+      <!-- TRANSACTIONS TABLE -->
+      <section class="transactions">
+        <h2>Recent Transactions</h2>
+        <table id="transactionsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody">
+            <!-- Transactions will be added here -->
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+</body>
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get elements
+      const balanceElement = document.getElementById('balance');
+      const totalIncomeElement = document.getElementById('totalIncome');
+      const totalExpensesElement = document.getElementById('totalExpenses');
+      const transactionsBody = document.getElementById('transactionsBody');
+
+      // Get username
+      const storedUsername = localStorage.getItem('novaWalletUsername');
+
+      if (storedUsername) {
+        const balance = parseFloat(localStorage.getItem(`${storedUsername}_balance`)) || 0;
+        const totalIncome = parseFloat(localStorage.getItem(`${storedUsername}_totalIncome`)) || 0;
+        const expenses = JSON.parse(localStorage.getItem(`${storedUsername}_expenses`)) || [];
+
+        
+        const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+    
+        balanceElement.textContent = `₦${balance.toFixed(2)}`;
+        totalIncomeElement.textContent = `₦${totalIncome.toFixed(2)}`;
+        totalExpensesElement.textContent = `₦${totalExpenses.toFixed(2)}`;
+
+        // Populate transactions table
+        transactionsBody.innerHTML = '';
+        expenses.forEach(expense => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${new Date(expense.date).toLocaleDateString()}</td>
+            <td>${expense.description}</td>
+            <td>Expense</td>
+            <td class="minus">-₦${expense.amount.toFixed(2)}</td>
+          `;
+          transactionsBody.appendChild(row);
+        });
+      }
+    });
+  </script>
+</html>

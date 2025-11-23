@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business – NovaWallet</title>
+  <link rel="stylesheet" href="../otherpages.css/business.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <h2 class="logo">NovaWallet</h2>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+  </div>
+
+    <ul id="nav-links" class="nav-links">
+      <li><a href="./home.html">Home</a></li>
+      <li><a href="./firstpersonal.html">Personal</a></li>
+      <li><a class="active" href="./business.html">Business</a></li>
+      <li><a href="./developer.html">Developers</a></li>
+      <li><a href="./learn.html">Learn</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Track Your Business Spending With Ease</h1>
+    <p>Organize business expenses, manage team spending, and get clear financial reports — all in one simple dashboard.</p>
+    <a href="#" class="btn">Get Started</a>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <h2>Business Tools That Work For You</h2>
+
+    <div class="grid">
+
+      <div class="feature-card">
+        <h3>Team Expense Tracking</h3>
+        <p>Add team members and monitor their spending. Perfect for small teams, freelancers, and startups.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Smart Categories</h3>
+        <p>Automatically group expenses into categories like Utilities, Transport, Internet, Office, and more.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Real-Time Dashboard</h3>
+        <p>See your total spending, monthly trends, and category breakdown at a glance.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Business Budget Planner</h3>
+        <p>Set monthly or weekly spending limits and get alerts when you're close to exceeding them.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Export Reports</h3>
+        <p>Download your business expenses in PDF, CSV, or Excel for accounting and record keeping.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Cloud Sync</h3>
+        <p>Your business data is saved and synced securely across all your devices automatically.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Improve Your Business Spending Today</h2>
+    <p>Track all expenses, control team spending, and understand your business finances better.</p>
+    <a href="#" class="btn">Create Business Account</a>
+  </section>
+
+  <footer>
+    <p>© 2025 NovaWallet – Business Expense Manager</p>
+  </footer>
+
+</body>
+<script>
+function toggleMenu() {
+  document.getElementById("nav-links").classList.toggle("show");
+
+  // Turn hamburger into X
+  document.querySelector(".hamburger").classList.toggle("open");
+}
+</script>
+
+
+</html>

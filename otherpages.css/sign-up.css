@@ -25,6 +25,7 @@ body {
 }
 
 .container h1 {
+  color: #6c5ce7;;
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -48,7 +49,7 @@ body {
 }
 
 .input-group input:focus {
-  border-color: #4a7cff;
+  border-color: #6c5ce7;;
   outline: none;
 }
 
@@ -56,7 +57,7 @@ body {
 button {
   width: 100%;
   padding: 14px;
-  background: #4a7cff;
+  background: #6c5ce7;;
   color: #fff;
   font-weight: 600;
   border: none;
@@ -67,7 +68,7 @@ button {
 }
 
 button:hover {
-  background: #2f5fe0;
+  background: #6c5ce7;;
 }
 
 /* Sign up link */
@@ -76,7 +77,7 @@ button:hover {
 }
 
 .signup-link a {
-  color: #4a7cff;
+  color: #6c5ce7;;
   font-weight: 600;
   text-decoration: none;
 }
@@ -85,9 +86,42 @@ button:hover {
   text-decoration: underline;
 }
 
-/* Error message */
-#error-msg {
-  color: red;
-  margin-top: 10px;
+/* Centered Error Box Inside Form */
+#error-box {
+  width: 90%;
+  margin: 0 auto 20px auto; /* Center horizontally */
+  background: rgba(0, 0, 0, 0.388);
+  color: black;
+  border-left: 4px solid black;
+  padding: 15px;
+  border-radius: 10px;
   font-size: 14px;
+  animation: fadeIn 0.3s ease-in-out;
+  text-align: left;
+  position: relative;
 }
+
+/* Close text at bottom-left */
+#close-error {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6c5ce7;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: right;
+}
+#close-error:hover {
+  text-decoration: underline;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

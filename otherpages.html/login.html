@@ -14,6 +14,12 @@
   <div class="container">
     <h1 id="loginTitle">Login</h1>
 
+     <!-- 🔥 ERROR BOX ADDED HERE -->
+    <div id="error-box" class="hidden">
+      <p id="error-text"></p>
+      <span id="close-error">Close</span>
+    </div>
+
     <form id="loginForm">
       <div class="input-group">
         <input type="email" id="email" placeholder="email@gmail.com" required>
@@ -41,53 +47,64 @@
         storageBucket: "novawallet-6e0cb.firebasestorage.app",
         messagingSenderId: "408070207218",
         appId: "1:408070207218:web:aee6c3a06582964ab4026b",
-        measurementId: "G-1HPGP8X45H"    };
+        measurementId: "G-1HPGP8X45H"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    
-      const errorMsg = document.getElementById('error-msg');
 
-    loginForm.addEventListener('submit', async(e) => {
+    // 🔥 ERROR BOX SELECTORS
+    const errorBox = document.getElementById("error-box");
+    const errorText = document.getElementById("error-text");
+    const closeError = document.getElementById("close-error");
+
+    function showError(message) {
+      errorText.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    closeError.addEventListener("click", () => {
+      errorBox.classList.add("hidden");
+    });
+
+    const loginForm = document.getElementById("loginForm");
+
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
 
-       errorMsg.textContent = '';
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
 
+      // 🔥 VALIDATION USING ERROR BOX
+      if (!email || !password) {
+        showError("All fields are required.");
+        return;
+      }
 
-    if (!email || !password) {
-      errorMsg.textContent = "All fields are required.";
-      return;
-    }
+      if (!email.includes('@')) {
+        showError("Please enter a valid email address.");
+        return;
+      }
 
-    if (!email.includes('@')) {
-      errorMsg.textContent = "Please enter a valid email address.";
-      return;
-    }
-
-    if (password.length < 6) {
-      errorMsg.textContent = "Password should be at least 6 characters long.";
-      return;
-    }
-
-    
+      if (password.length < 6) {
+        showError("Password should be at least 6 characters long.");
+        return;
+      }
 
       try {
         const credential = await signInWithEmailAndPassword(auth, email, password);
-        const user = credential.user;
-        console.log('user logged in ', user);
-        
-        alert("Login successfully!");
+
+        alert("Login successful!");
         loginForm.reset();
         window.location.href = "./dashboard.html";
+
       } catch (error) {
         console.log(error);
-        errorMsg.textContent = error.message;
-        // alert("Error creating account: " + error.message);
-    }
+        showError(error.message); // 🔥 Firebase login error displayed in box
+      }
     });
-  </script>
+</script>
+
 
 
 </body>

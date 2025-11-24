@@ -9,16 +9,21 @@
 </head>
 <body>
 <div class="container">
+
     <h1>Signup</h1>
+
+    <!-- 🔥 ERROR BOX ADDED HERE -->
+    <div id="error-box" class="hidden">
+      <p id="error-text"></p>
+      <span id="close-error">Close</span>
+    </div>
 
     <form id="signupForm">
       <div class="input-group">
-
         <input type="text" id="username" placeholder="Motun" required>
         <input type="email" id="email" placeholder="example@gmail.com" required>
         <input type="password" id="password" placeholder="Password" required>
         <input type="password" id="confirm-password" placeholder="Confirm Password" required>
-
       </div>
 
       <button type="submit">Signup</button>
@@ -27,12 +32,12 @@
         Already have an account? <a href="./login.html">Log in</a>
       </p>
 
-      <p id="error-msg"></p>
+      <!-- <p id="error-msg"></p> -->
     </form>
 
-  </div>
-
+</div>
 </body>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
@@ -51,7 +56,22 @@
   const auth = getAuth(app);
 
   const signupForm = document.getElementById('signupForm');
-  const errorMsg = document.getElementById('error-msg');
+
+  // 🔥 NEW ERROR BOX SELECTORS
+  const errorBox = document.getElementById("error-box");
+  const errorText = document.getElementById("error-text");
+  const closeError = document.getElementById("close-error");
+
+  // 🔥 SHOW ERROR FUNCTION
+  function showError(message) {
+    errorText.textContent = message;
+    errorBox.classList.remove("hidden");
+  }
+
+  // 🔥 CLOSE BUTTON HANDLER
+  closeError.addEventListener("click", () => {
+    errorBox.classList.add("hidden");
+  });
 
   signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -61,44 +81,41 @@
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
 
-    errorMsg.textContent = '';
-
     if (!username || !email || !password || !confirmPassword) {
-      errorMsg.textContent = "All fields are required.";
+      showError("All fields are required.");
       return;
     }
 
     if (username.length < 3) {
-      errorMsg.textContent = "Username should be at least 3 characters long.";
+      showError("Username should be at least 3 characters long.");
       return;
     }
+
     if (username.length > 20) {
-      errorMsg.textContent = "Username should not exceed 20 characters.";
+      showError("Username should not exceed 20 characters.");
       return;
     }
 
     if (!email.includes('@')) {
-      errorMsg.textContent = "Please enter a valid email address.";
+      showError("Please enter a valid email address.");
       return;
     }
 
     if (password.length < 6) {
-      errorMsg.textContent = "Password should be at least 6 characters long.";
+      showError("Password should be at least 6 characters long.");
       return;
     }
 
     if (password !== confirmPassword) {
-      errorMsg.textContent = "Passwords do not match!";
+      showError("Passwords do not match!");
       return;
     }
 
     try {
       const credential = await createUserWithEmailAndPassword(auth, email, password);
 
-      // 🔥 NEW FIX: Save username in Firebase Auth profile
       await updateProfile(credential.user, { displayName: username });
 
-      // Also save username in localStorage for quick dashboard access
       localStorage.setItem('novaWalletUsername', username);
 
       alert("Account created successfully!");
@@ -107,7 +124,7 @@
 
     } catch (error) {
       console.log(error);
-      errorMsg.textContent = error.message;
+      showError(error.message); // 🔥 UPDATED
     }
   });
 </script>

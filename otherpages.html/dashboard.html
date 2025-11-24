@@ -1,171 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to Our User Dashboard</title>
-  <link rel="shortcut icon" href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png" type="image/x-icon">
-  <link rel="stylesheet" href="../otherpages.css/dashboard.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-
-  <!-- NAVIGATION -->
-  <nav>
-    <div class="nav-container">
-      <div class="logo">
-        <h2>NovaWallet</h2>
-      </div>
-      <div class="nav-links">
-        <a href="../index.html">Home</a>
-        <a href="personal.html">Personal</a>
-        <a href="#" class="active">Dashboard</a>
-      </div>
-      <div class="user-menu">
-        <div class="user-avatar"> 
-          <i class="fas fa-user"></i> 
-        </div> 
-        <span id="welcomeMessage">Welcome back!</span>
-        <button id="logoutBtn" class="logout-btn">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- DASHBOARD CONTENT -->
-  <div class="dashboard">
-    <div class="dashboard-header">
-      <h1>Expense Tracker Dashboard</h1>
-      <p>Manage your income and expenses</p>
-    </div>
-
-    <!-- BALANCE DISPLAY -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">
-          <i class="fas fa-wallet"></i>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Our User Dashboard</title>
+    <link
+      rel="shortcut icon"
+      href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="../otherpages.css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-container">
+        <div class="logo">
+          <h2>NovaWallet</h2>
+          <img src="../images/edited_NovaWallet-removebg-preview.png" alt="">
         </div>
-        <div class="stat-content">
-          <h3 id="balanceTitle">Current Balance</h3>
-          <div class="stat-value" id="balance">$0.00</div>
+        <div class="user-mini">
+        <label for="profileInput" class="profile-container">
+          <img id="profilePicture" src="" alt="Profile">
+        </label>
+        <input type="file" id="profileInput" accept="image/*" style="display: none;">
+        <span id="welcomeMessage"></span>
+      </div>
+
+
+          <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
         </div>
       </div>
-    </div>
+    </nav>
 
-    <!-- INCOME SECTION -->
-    <div class="quick-actions">
-      <h2>Add Income</h2>
-      <div class="income-form">
-        <input type="number" id="incomeAmount" placeholder="Enter income amount" min="0" step="0.01">
-        <button id="addIncomeBtn" class="action-btn">
-          <i class="fas fa-plus"></i> Add Income
-        </button>
+    <!-- DASHBOARD CONTENT -->
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h1>Expense Tracker Dashboard</h1>
+        <p>Manage your income and expenses</p>
+      </div>
+
+      <!-- BALANCE DISPLAY -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="balanceTitle">Current Balance</h3>
+            <div class="stat-value" id="balance">$0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INCOME SECTION -->
+      <div class="quick-actions">
+        <h2>Add Income</h2>
+        <div class="income-form">
+          <input
+            type="number"
+            id="incomeAmount"
+            placeholder="Enter income amount"
+            min="0"
+            step="0.01"
+          />
+          <button id="addIncomeBtn" class="action-btn">
+            <i class="fas fa-plus"></i> Add Income
+          </button>
+        </div>
+      </div>
+
+      <!-- EXPENSE SECTION -->
+      <div class="transactions-section">
+        <div class="section-header">
+          <h2>Add Expense</h2>
+        </div>
+        <div class="expense-form">
+          <input
+            type="text"
+            id="expenseDescription"
+            placeholder="Expense description"
+          />
+          <input
+            type="number"
+            id="expenseAmount"
+            placeholder="Amount"
+            min="0"
+            step="0.01"
+          />
+          <button id="addExpenseBtn" class="action-btn">
+            <i class="fas fa-plus"></i> Add Expense
+          </button>
+        </div>
+      </div>
+
+      <!-- EXPENSE LIST -->
+      <div class="transactions-section">
+        <div class="section-header">
+          <h2>Expense List</h2>
+        </div>
+        <div class="transactions-list" id="expenseList"></div>
       </div>
     </div>
 
-    <!-- EXPENSE SECTION -->
-    <div class="transactions-section">
-      <div class="section-header">
-        <h2>Add Expense</h2>
-      </div>
-      <div class="expense-form">
-        <input type="text" id="expenseDescription" placeholder="Expense description">
-        <input type="number" id="expenseAmount" placeholder="Amount" min="0" step="0.01">
-        <button id="addExpenseBtn" class="action-btn">
-          <i class="fas fa-plus"></i> Add Expense
-        </button>
-      </div>
-    </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-    <!-- EXPENSE LIST -->
-    <div class="transactions-section">
-      <div class="section-header">
-        <h2>Expense List</h2>
-      </div>
-      <div class="transactions-list" id="expenseList">
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
-    const firebaseConfig = {
+      const firebaseConfig = {
         apiKey: "AIzaSyBb5SR7xj5ywVECkaRWEW4Bh0kHMj01WvQ",
         authDomain: "novawallet-6e0cb.firebaseapp.com",
         projectId: "novawallet-6e0cb",
         storageBucket: "novawallet-6e0cb.firebasestorage.app",
         messagingSenderId: "408070207218",
         appId: "1:408070207218:web:aee6c3a06582964ab4026b",
-        measurementId: "G-1HPGP8X45H"
-    };
+        measurementId: "G-1HPGP8X45H",
+      };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
 
-    let currentUser = null;
-    let storedUsername = null;
-    let balance = 0;
-    let totalIncome = 0;
-    let expenses = [];
+      let currentUser = null;
+      let storedUsername = null;
+      let balance = 0;
+      let totalIncome = 0;
+      let expenses = [];
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const welcomeMessage = document.getElementById('welcomeMessage');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const balanceElement = document.getElementById('balance');
-      const addIncomeBtn = document.getElementById('addIncomeBtn');
-      const incomeAmount = document.getElementById('incomeAmount');
-      const addExpenseBtn = document.getElementById('addExpenseBtn');
-      const expenseDescription = document.getElementById('expenseDescription');
-      const expenseAmount = document.getElementById('expenseAmount');
-      const expenseList = document.getElementById('expenseList');
+      document.addEventListener("DOMContentLoaded", function () {
+        const welcomeMessage = document.getElementById("welcomeMessage");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const balanceElement = document.getElementById("balance");
+        const addIncomeBtn = document.getElementById("addIncomeBtn");
+        const incomeAmount = document.getElementById("incomeAmount");
+        const addExpenseBtn = document.getElementById("addExpenseBtn");
+        const expenseDescription =
+          document.getElementById("expenseDescription");
+        const expenseAmount = document.getElementById("expenseAmount");
+        const expenseList = document.getElementById("expenseList");
 
-      // WATCH AUTH STATE
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          currentUser = user;
+        // WATCH AUTH STATE
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            currentUser = user;
 
-          // Get username from signup localStorage
-          storedUsername = localStorage.getItem('novaWalletUsername') || "User";
+            // Get username from signup localStorage
+            storedUsername =
+              localStorage.getItem("novaWalletUsername") || "User";
 
-          // Show welcome message
-          if (welcomeMessage) {
-            welcomeMessage.textContent = `Welcome back, ${storedUsername}!`;
+            // Show welcome message
+            if (welcomeMessage) {
+              welcomeMessage.textContent = `Welcome back, ${storedUsername}!`;
+            }
+
+            loadUserData();
+          } else {
+            window.location.href = "login.html";
           }
+        });
 
-          loadUserData();
-        } else {
-          window.location.href = "login.html";
+        function loadUserData() {
+          if (!currentUser) return;
+
+          // Initialize data from localStorage
+          balance =
+            parseFloat(localStorage.getItem(`${storedUsername}_balance`)) || 0;
+          totalIncome =
+            parseFloat(localStorage.getItem(`${storedUsername}_totalIncome`)) ||
+            0;
+          expenses =
+            JSON.parse(localStorage.getItem(`${storedUsername}_expenses`)) ||
+            [];
+
+          updateBalance();
+          updateExpenseList();
         }
-      });
 
-      function loadUserData() {
-        if (!currentUser) return;
+        function updateBalance() {
+          balanceElement.textContent = `$${balance.toFixed(2)}`;
+          localStorage.setItem(`${storedUsername}_balance`, balance.toString());
+          localStorage.setItem(
+            `${storedUsername}_totalIncome`,
+            totalIncome.toString()
+          );
+        }
 
-        // Initialize data from localStorage
-        balance = parseFloat(localStorage.getItem(`${storedUsername}_balance`)) || 0;
-        totalIncome = parseFloat(localStorage.getItem(`${storedUsername}_totalIncome`)) || 0;
-        expenses = JSON.parse(localStorage.getItem(`${storedUsername}_expenses`)) || [];
-
-        updateBalance();
-        updateExpenseList();
-      }
-
-      function updateBalance() {
-        balanceElement.textContent = `$${balance.toFixed(2)}`;
-        localStorage.setItem(`${storedUsername}_balance`, balance.toString());
-        localStorage.setItem(`${storedUsername}_totalIncome`, totalIncome.toString());
-      }
-
-      function updateExpenseList() {
-        expenseList.innerHTML = '';
-        expenses.forEach((expense, index) => {
-          const expenseItem = document.createElement('div');
-          expenseItem.className = 'transaction-item';
-          expenseItem.innerHTML = `
+        function updateExpenseList() {
+          expenseList.innerHTML = "";
+          expenses.forEach((expense, index) => {
+            const expenseItem = document.createElement("div");
+            expenseItem.className = "transaction-item";
+            expenseItem.innerHTML = `
             <div class="transaction-icon">
               <i class="fas fa-shopping-cart"></i>
             </div>
@@ -173,79 +210,125 @@
               <h4>${expense.description}</h4>
               <p>${new Date(expense.date).toLocaleDateString()}</p>
             </div>
-            <div class="transaction-amount negative">$${expense.amount.toFixed(2)}</div>
+            <div class="transaction-amount negative">$${expense.amount.toFixed(
+              2
+            )}</div>
             <button class="delete-btn" data-index="${index}">
               <i class="fas fa-trash"></i>
             </button>
           `;
-          expenseList.appendChild(expenseItem);
-        });
-        localStorage.setItem(`${storedUsername}_expenses`, JSON.stringify(expenses));
-      }
-
-      addIncomeBtn.addEventListener('click', function() {
-        const amount = parseFloat(incomeAmount.value);
-        if (amount > 0) {
-          balance += amount;
-          totalIncome += amount;
-          updateBalance();
-          incomeAmount.value = '';
-          alert('Income added successfully!');
-        } else {
-          alert('Please enter a valid income amount.');
-        }
-      });
-
-      addExpenseBtn.addEventListener('click', function() {
-        const description = expenseDescription.value.trim();
-        const amount = parseFloat(expenseAmount.value);
-        if (description && amount > 0) {
-          expenses.push({
-            description,
-            amount,
-            date: new Date().toISOString()
+            expenseList.appendChild(expenseItem);
           });
-          balance -= amount;
-          updateBalance();
-          updateExpenseList();
-          expenseDescription.value = '';
-          expenseAmount.value = '';
-          alert('Expense added successfully!');
-        } else {
-          alert('Please enter a valid description and amount.');
+          localStorage.setItem(
+            `${storedUsername}_expenses`,
+            JSON.stringify(expenses)
+          );
         }
-      });
 
-      expenseList.addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-btn') || e.target.closest('.delete-btn')) {
-          const index = e.target.closest('.delete-btn').dataset.index;
-          const expense = expenses[index];
-          if (confirm(`Are you sure you want to delete "${expense.description}" for $${expense.amount.toFixed(2)}?`)) {
-            balance += expense.amount;
-            expenses.splice(index, 1);
+        addIncomeBtn.addEventListener("click", function () {
+          const amount = parseFloat(incomeAmount.value);
+          if (amount > 0) {
+            balance += amount;
+            totalIncome += amount;
+            updateBalance();
+            incomeAmount.value = "";
+            alert("Income added successfully!");
+          } else {
+            alert("Please enter a valid income amount.");
+          }
+        });
+
+        addExpenseBtn.addEventListener("click", function () {
+          const description = expenseDescription.value.trim();
+          const amount = parseFloat(expenseAmount.value);
+          if (description && amount > 0) {
+            expenses.push({
+              description,
+              amount,
+              date: new Date().toISOString(),
+            });
+            balance -= amount;
             updateBalance();
             updateExpenseList();
-            alert('Expense deleted successfully!');
+            expenseDescription.value = "";
+            expenseAmount.value = "";
+            alert("Expense added successfully!");
+          } else {
+            alert("Please enter a valid description and amount.");
           }
-        }
+        });
+
+        expenseList.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("delete-btn") ||
+            e.target.closest(".delete-btn")
+          ) {
+            const index = e.target.closest(".delete-btn").dataset.index;
+            const expense = expenses[index];
+            if (
+              confirm(
+                `Are you sure you want to delete "${
+                  expense.description
+                }" for $${expense.amount.toFixed(2)}?`
+              )
+            ) {
+              balance += expense.amount;
+              expenses.splice(index, 1);
+              updateBalance();
+              updateExpenseList();
+              alert("Expense deleted successfully!");
+            }
+          }
+        });
+
+        // ✅ LOGOUT WITH USERNAME CONFIRM
+        logoutBtn.addEventListener("click", function () {
+          const usernameToShow = storedUsername || "User";
+          const confirmLogout = confirm(
+            `${usernameToShow}, are you sure you want to log out?`
+          );
+
+          if (confirmLogout) {
+            localStorage.removeItem("novaWalletUsername");
+            localStorage.removeItem("LoggedInUser");
+            window.location.href = "login.html";
+          }
+        });
+
+        updateBalance();
+        updateExpenseList();
       });
+      window.toggleMenu = function () {
+        document.getElementById("nav-menu").classList.toggle("show");
+      };
+      const profileInput = document.getElementById("profileInput");
+const profilePicture = document.getElementById("profilePicture");
 
-      // ✅ LOGOUT WITH USERNAME CONFIRM
-      logoutBtn.addEventListener('click', function() {
-        const usernameToShow = storedUsername || "User";
-        const confirmLogout = confirm(`${usernameToShow}, are you sure you want to log out?`);
+// Load saved profile image
+const savedImage = localStorage.getItem("nova_profile_image");
+if (savedImage) {
+  profilePicture.src = savedImage;
+}
 
-        if (confirmLogout) {
-          localStorage.removeItem('novaWalletUsername');
-          localStorage.removeItem('LoggedInUser');
-          window.location.href = "login.html";
-        }
-      });
+// When user selects an image
+profileInput.addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
 
-      updateBalance();
-      updateExpenseList();
-    });
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const imageURL = e.target.result;
 
-  </script>
-</body>
+    // Show immediately
+    profilePicture.src = imageURL;
+
+    // Save to localStorage
+    localStorage.setItem("nova_profile_image", imageURL);
+  };
+
+  reader.readAsDataURL(file);
+});
+
+    </script>
+  </body>
 </html>

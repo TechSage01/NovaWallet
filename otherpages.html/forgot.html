@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password - NovaWallet</title>
+  <link rel="stylesheet" href="../otherpages.css/forgot.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Forgot Password</h1>
+
+    <!-- ERROR BOX -->
+    <!-- <div id="error-box" class="hidden">
+      <p id="error-text"></p>
+      <span id="close-error">Close</span>
+    </div> -->
+
+    <form id="forgotForm">
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <button type="submit">Send Reset Link</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBb5SR7xj5ywVECkaRWEW4Bh0kHMj01WvQ",
+      authDomain: "novawallet-6e0cb.firebaseapp.com",
+      projectId: "novawallet-6e0cb",
+      storageBucket: "novawallet-6e0cb.firebasestorage.app",
+      messagingSenderId: "408070207218",
+      appId: "1:408070207218:web:aee6c3a06582964ab4026b",
+      measurementId: "G-1HPGP8X45H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const forgotForm = document.getElementById('forgotForm');
+    const errorBox = document.getElementById("error-box");
+    const errorText = document.getElementById("error-text");
+    const closeError = document.getElementById("close-error");
+
+    function showError(message) {
+      errorText.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    closeError.addEventListener("click", () => {
+      errorBox.classList.add("hidden");
+    });
+
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+
+      if (!email) {
+        showError("Please enter your email address.");
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("A password reset link has been sent to your email!");
+        forgotForm.reset();
+      } catch (error) {
+        console.log(error);
+        showError(error.message);
+      }
+    });
+  </script>
+</body>
+</html>

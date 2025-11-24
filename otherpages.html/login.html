@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="../otherpages.css/login.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
+<style>
+  
+</style>
 
 <body>
 
@@ -32,78 +35,87 @@
         Don't have an account? <a href="./sign-up.html">Sign up</a>
       </p>
 
+      <p class="forgot-link">
+        <a href="./forgot.html">Forgot Password?</a>
+      </p>
+
       <p id="error-msg"></p>
     </form>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBb5SR7xj5ywVECkaRWEW4Bh0kHMj01WvQ",
-        authDomain: "novawallet-6e0cb.firebaseapp.com",
-        projectId: "novawallet-6e0cb",
-        storageBucket: "novawallet-6e0cb.firebasestorage.app",
-        messagingSenderId: "408070207218",
-        appId: "1:408070207218:web:aee6c3a06582964ab4026b",
-        measurementId: "G-1HPGP8X45H"
-    };
+  const firebaseConfig = {
+      apiKey: "AIzaSyBb5SR7xj5ywVECkaRWEW4Bh0kHMj01WvQ",
+      authDomain: "novawallet-6e0cb.firebaseapp.com",
+      projectId: "novawallet-6e0cb",
+      storageBucket: "novawallet-6e0cb.firebasestorage.app",
+      messagingSenderId: "408070207218",
+      appId: "1:408070207218:web:aee6c3a06582964ab4026b",
+      measurementId: "G-1HPGP8X45H"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    // 🔥 ERROR BOX SELECTORS
-    const errorBox = document.getElementById("error-box");
-    const errorText = document.getElementById("error-text");
-    const closeError = document.getElementById("close-error");
+  const errorBox = document.getElementById("error-box");
+  const errorText = document.getElementById("error-text");
+  const closeError = document.getElementById("close-error");
 
-    function showError(message) {
-      errorText.textContent = message;
-      errorBox.classList.remove("hidden");
+  function showError(message) {
+    errorText.textContent = message;
+    errorBox.classList.remove("hidden");
+  }
+
+  closeError.addEventListener("click", () => {
+    errorBox.classList.add("hidden");
+  });
+
+  const loginForm = document.getElementById("loginForm");
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!email || !password) {
+      showError("All fields are required.");
+      return;
     }
 
-    closeError.addEventListener("click", () => {
-      errorBox.classList.add("hidden");
-    });
+    if (!email.includes('@')) {
+      showError("Please enter a valid email address.");
+      return;
+    }
 
-    const loginForm = document.getElementById("loginForm");
+    if (password.length < 6) {
+      showError("Password should be at least 6 characters long.");
+      return;
+    }
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    try {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
 
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      // 🔥 VALIDATION USING ERROR BOX
-      if (!email || !password) {
-        showError("All fields are required.");
+      // ✅ Check if email is verified
+      if (!credential.user.emailVerified) {
+        showError("Please verify your email before logging in. Check your inbox!");
         return;
       }
 
-      if (!email.includes('@')) {
-        showError("Please enter a valid email address.");
-        return;
-      }
+      alert("Login successful!");
+      loginForm.reset();
+      window.location.href = "./dashboard.html";
 
-      if (password.length < 6) {
-        showError("Password should be at least 6 characters long.");
-        return;
-      }
-
-      try {
-        const credential = await signInWithEmailAndPassword(auth, email, password);
-
-        alert("Login successful!");
-        loginForm.reset();
-        window.location.href = "./dashboard.html";
-
-      } catch (error) {
-        console.log(error);
-        showError(error.message); // 🔥 Firebase login error displayed in box
-      }
-    });
+    } catch (error) {
+      console.log(error);
+      showError(error.message);
+    }
+  });
 </script>
+
 
 
 

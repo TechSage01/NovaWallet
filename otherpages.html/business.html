@@ -20,7 +20,7 @@
   </div>
 
     <ul id="nav-links" class="nav-links">
-      <li><a href="./index.html">Home</a></li>
+      <li><a href="../index.html">Home</a></li>
       <li><a href="./firstpersonal.html">Personal</a></li>
       <li><a class="active" href="./business.html">Business</a></li>
       <li><a href="./developer.html">Developers</a></li>
@@ -30,10 +30,9 @@
 
   <!-- HERO -->
   <section class="hero">
-    <h1>Track Your Business Spending With Ease</h1>
+    <h2>Track Your Business Spending With Ease</h2>
     <p>Organize business expenses, manage team spending, and get clear financial reports — all in one simple dashboard.</p>
     <a href="#" class="btn">Get Started</a>
-  </section>
 
   <!-- FEATURES -->
   <section class="features">
@@ -93,6 +92,66 @@ function toggleMenu() {
   // Turn hamburger into X
   document.querySelector(".hamburger").classList.toggle("open");
 }
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const words = [
+    "Track Your Business Spending With Ease",
+    "Manage Team Expenses Efficiently",
+    "Get Clear Financial Reports",
+    "Optimize Business Finances",
+    "Control Spending, Boost Profits"
+  ];
+  let i = 0;
+  let timer;
+
+  function typingEffect(word, callback) {
+    let index = 0;
+    const heroHeader = document.querySelector(".hero h2");
+    heroHeader.textContent = "";
+
+    function type() {
+      if (index < word.length) {
+        heroHeader.textContent += word.charAt(index);
+        index++;
+        timer = setTimeout(type, 100);
+      } else {
+        setTimeout(callback, 1500);
+      }
+    }
+    type();
+  }
+
+  function eraseEffect(callback) {
+    const heroHeader = document.querySelector(".hero h2");
+    let text = heroHeader.textContent;
+    let index = text.length;
+
+    function erase() {
+      if (index > 0) {
+        heroHeader.textContent = text.substring(0, index - 1);
+        index--;
+        timer = setTimeout(erase, 50);
+      } else {
+        setTimeout(callback, 300);
+      }
+    }
+    erase();
+  }
+
+  function loop() {
+    typingEffect(words[i], function () {
+      eraseEffect(function () {
+        i++;
+        if (i >= words.length) i = 0;
+        loop();
+      });
+    });
+  }
+
+  loop();
+});
 </script>
 
 

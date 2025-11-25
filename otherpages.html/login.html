@@ -97,22 +97,26 @@
     }
 
     try {
-      const credential = await signInWithEmailAndPassword(auth, email, password);
+  const credential = await signInWithEmailAndPassword(auth, email, password);
 
-      // ✅ Check if email is verified
-      if (!credential.user.emailVerified) {
-        showError("Please verify your email before logging in. Check your inbox!");
-        return;
-      }
+  // ✅ Check if email is verified
+  if (!credential.user.emailVerified) {
+    showError("Please verify your email before logging in. Check your inbox!");
+    return;
+  }
 
-      alert("Login successful!");
-      loginForm.reset();
-      window.location.href = "./dashboard.html";
+  // ✅ Save displayName from Firebase
+  localStorage.setItem("novaWalletUsername", credential.user.displayName || "User");
 
-    } catch (error) {
-      console.log(error);
-      showError(error.message);
-    }
+  alert("Login successful!");
+  loginForm.reset();
+  window.location.href = "./dashboard.html";
+
+} catch (error) {
+  console.log(error);
+  showError(error.message);
+}
+
   });
 </script>
 

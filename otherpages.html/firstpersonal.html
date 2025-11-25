@@ -24,7 +24,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 70px;
+        padding-left: 70px;
+        padding-right: 70px;
         background: white;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         position: sticky;
@@ -209,6 +210,22 @@
         font-weight: 700;
       }
 
+      /* New text changing styles */
+      .hero-text h2 span {
+        border-right: 2px solid #fff;
+        padding-right: 5px;
+        animation: blinkCaret 0.75s step-end infinite;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      @keyframes blinkCaret {
+        from, to { border-color: transparent; }
+        50% { border-color: white; }
+      }
+
       .hero-text p {
         font-size: 1.1rem;
         line-height: 1.6;
@@ -304,11 +321,11 @@
         <span></span>
       </div>
       <ul id="nav-links">
-        <li><a href="./index.html">Home</a></li>
-        <li class="active"><a href="personal.html">Personal</a></li>
-        <li><a href="business.html">Business</a></li>
-        <li><a href="developers.html">Developers</a></li>
-        <li><a href="learn.html">Learn</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li class="active"><a href="./personal.html">Personal</a></li>
+        <li><a href="./business.html">Business</a></li>
+        <li><a href="./developers.html">Developers</a></li>
+        <li><a href="./learn.html">Learn</a></li>
       </ul>
     </nav>
 
@@ -367,6 +384,60 @@ function toggleMenu() {
   // Turn hamburger into X
   document.querySelector(".hamburger").classList.toggle("open");
 }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const words = ["Personal Finance, Made Simple.", "Save More, Waste Less.", "Your Money, Your Control.", "Smart Savings for a Bright Future."];
+    let i = 0;
+    let timer;
+
+    function typingEffect(word, callback) {
+      let index = 0;
+      const textElement = document.querySelector(".hero-text h2");
+      textElement.textContent = "";
+
+      function type() {
+        if (index < word.length) {
+          textElement.textContent += word.charAt(index);
+          index++;
+          timer = setTimeout(type, 100);
+        } else {
+          setTimeout(callback, 1500);
+        }
+      }
+      type();
+    }
+
+    function eraseEffect(callback) {
+      const textElement = document.querySelector(".hero-text h2");
+      let text = textElement.textContent;
+      let index = text.length;
+
+      function erase() {
+        if (index > 0) {
+          textElement.textContent = text.substring(0, index - 1);
+          index--;
+          timer = setTimeout(erase, 50);
+        } else {
+          setTimeout(callback, 300);
+        }
+      }
+      erase();
+    }
+
+    function loop() {
+      typingEffect(words[i], function () {
+        eraseEffect(function () {
+          i++;
+          if (i >= words.length) i = 0;
+          loop();
+        });
+      });
+    }
+
+    loop();
+  });
 </script>
 
 </html>

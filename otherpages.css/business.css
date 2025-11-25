@@ -151,9 +151,25 @@ body {
   background: #e8f0ff;
 }
 
-.hero h1 {
+.hero h2 {
   font-size: 40px;
   color: #0037a5;
+}
+
+/* New text changing styles */
+.hero h2 span {
+  border-right: 2px solid #0037a5;
+  padding-right: 5px;
+  animation: blinkCaret 0.75s step-end infinite;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+@keyframes blinkCaret {
+  from, to { border-color: transparent; }
+  50% { border-color: #0037a5; }
 }
 
 .hero p {

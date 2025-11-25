@@ -23,7 +23,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 70px;
+        padding-left: 70px;
+        padding-right: 70px;
         background: white;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         position: sticky;
@@ -289,11 +290,11 @@
       </div>
 
       <ul id="nav-links" class="nav-links">
-        <li><a href="./index.html">Home</a></li>
-        <li><a href="personal.html">Personal</a></li>
-        <li><a href="business.html">Business</a></li>
-        <li class="active"><a href="developers.html">Developers</a></li>
-        <li><a href="learn.html">Learn</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./firstpersonal.html">Personal</a></li>
+        <li><a href="./business.html">Business</a></li>
+        <li class="active"><a href="./developers.html">Developers</a></li>
+        <li><a href="./learn.html">Learn</a></li>
       </ul>
     </nav>
 
@@ -367,6 +368,66 @@ function toggleMenu() {
   // Turn hamburger into X
   document.querySelector(".hamburger").classList.toggle("open");
 }
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const words = [
+    "Build The Future With NovaWallet APIs",
+    "Integrate Payments Seamlessly",
+    "Secure Identity Verification",
+    "Automate Financial Workflows",
+    "Create Powerful Fintech Solutions"
+  ];
+  let i = 0;
+  let timer;
+
+  function typingEffect(word, callback) {
+    let index = 0;
+    const heroHeader = document.querySelector(".hero h2");
+    heroHeader.textContent = "";
+
+    function type() {
+      if (index < word.length) {
+        heroHeader.textContent += word.charAt(index);
+        index++;
+        timer = setTimeout(type, 100);
+      } else {
+        setTimeout(callback, 1500);
+      }
+    }
+    type();
+  }
+
+  function eraseEffect(callback) {
+    const heroHeader = document.querySelector(".hero h2");
+    let text = heroHeader.textContent;
+    let index = text.length;
+
+    function erase() {
+      if (index > 0) {
+        heroHeader.textContent = text.substring(0, index - 1);
+        index--;
+        timer = setTimeout(erase, 50);
+      } else {
+        setTimeout(callback, 300);
+      }
+    }
+    erase();
+  }
+
+  function loop() {
+    typingEffect(words[i], function () {
+      eraseEffect(function () {
+        i++;
+        if (i >= words.length) i = 0;
+        loop();
+      });
+    });
+  }
+
+  loop();
+});
 </script>
 
 </html>

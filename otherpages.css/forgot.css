@@ -65,32 +65,43 @@ button:hover {
   background-color: #6c5ce7;
 }
 
-/* ERROR BOX */
 #error-box {
-  background: #ffe6e6;
-  color: #d8000c;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#error-box p {
-  margin: 0;
+  width: 90%;
+  margin: 0 auto 20px auto; /* Center horizontally */
+  background: rgba(0, 0, 0, 0.388);
+  color: black;
+  border-left: 4px solid black;
+  padding: 15px;
+  border-radius: 10px;
   font-size: 14px;
+  animation: fadeIn 0.3s ease-in-out;
+  text-align: left;
+  position: relative;
 }
 
-#error-box span {
+/* Close text at bottom-left */
+#close-error {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6c5ce7;
+  text-decoration: none;
   cursor: pointer;
-  font-weight: bold;
+  text-align: right;
+}
+#close-error:hover {
+  text-decoration: underline;
 }
 
 .hidden {
   display: none;
 }
 
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 p {
   font-size: 14px;
   margin-top: 10px;

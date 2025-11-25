@@ -26,7 +26,7 @@
         <input type="password" id="confirm-password" placeholder="Confirm Password" required>
       </div>
 
-      <button type="submit">Signup</button>
+      <button type="submit" id="submit">Signup</button>
 
       <p class="signup-link">
         Already have an account? <a href="./login.html">Log in</a>
@@ -91,6 +91,9 @@ signupForm.addEventListener('submit', async (e) => {
     showError("Passwords do not match!");
     return;
   }
+  const submitBtn = document.getElementById('submit');
+  submitBtn.style.cursor = "not-allowed"
+  submitBtn.style.backgroundColor = "gray"
 
   try {
     const credential = await createUserWithEmailAndPassword(auth, email, password);

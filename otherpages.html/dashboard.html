@@ -196,7 +196,8 @@
       reader.readAsDataURL(file);
     });
 
-    // Watch auth state
+            // welcome message 
+            
     onAuthStateChanged(auth, (user) => {
       if (!user) return window.location.href = "login.html";
       currentUser = user;

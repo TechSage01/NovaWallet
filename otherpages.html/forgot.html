@@ -11,14 +11,14 @@
     <h1>Forgot Password</h1>
 
     <!-- ERROR BOX -->
-    <!-- <div id="error-box" class="hidden">
+     <div id="error-box" class="hidden">
       <p id="error-text"></p>
       <span id="close-error">Close</span>
-    </div> -->
+    </div>
 
     <form id="forgotForm">
       <input type="email" id="email" placeholder="Enter your email" required>
-      <button type="submit">Send Reset Link</button>
+      <button type="submit" id="reset">Send Reset Link</button>
     </form>
   </div>
 
@@ -39,19 +39,18 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const forgotForm = document.getElementById('forgotForm');
-    const errorBox = document.getElementById("error-box");
-    const errorText = document.getElementById("error-text");
-    const closeError = document.getElementById("close-error");
+     const errorBox = document.getElementById("error-box");
+  const errorText = document.getElementById("error-text");
+  const closeError = document.getElementById("close-error");
 
-    function showError(message) {
-      errorText.textContent = message;
-      errorBox.classList.remove("hidden");
-    }
+  function showError(message) {
+    errorText.textContent = message;
+    errorBox.classList.remove("hidden");
+  }
 
-    closeError.addEventListener("click", () => {
-      errorBox.classList.add("hidden");
-    });
+  closeError.addEventListener("click", () => {
+    errorBox.classList.add("hidden");
+  });
 
     forgotForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -61,6 +60,10 @@
         showError("Please enter your email address.");
         return;
       }
+
+      const resetBtn = document.getElementById('reset');
+      resetBtn.style.cursor = "not-allowed";
+      resetBtn.style.backgroundColor = "gray";
 
       try {
         await sendPasswordResetEmail(auth, email);

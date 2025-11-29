@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forgot Password - NovaWallet</title>
   <link rel="stylesheet" href="../otherpages.css/forgot.css">
+  <link rel="shortcut icon" href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png" type="image/x-icon">
 </head>
 <body>
   <div class="container">
@@ -18,7 +19,7 @@
 
     <form id="forgotForm">
       <input type="email" id="email" placeholder="Enter your email" required>
-      <button type="submit" id="reset">Send Reset Link</button>
+      <button type="submit" id="resetBtn">Send Reset Link</button>
     </form>
   </div>
 
@@ -38,7 +39,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
+    const forgotForm = document.getElementById("forgotForm");
      const errorBox = document.getElementById("error-box");
   const errorText = document.getElementById("error-text");
   const closeError = document.getElementById("close-error");
@@ -61,9 +62,10 @@
         return;
       }
 
-      const resetBtn = document.getElementById('reset');
+      const resetBtn = document.getElementById('resetBtn');
       resetBtn.style.cursor = "not-allowed";
       resetBtn.style.backgroundColor = "gray";
+      resetBtn.textContent = "Sending Link...";
 
       try {
         await sendPasswordResetEmail(auth, email);

@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta-name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - NovaWallet</title>
-  <link rel="shortcut icon" href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png" type="image/x-icon"> -->
   <link rel="stylesheet" href="../otherpages.css/login.css">
+  <link rel="shortcut icon" href="../images/ChatGPT Image Nov 15, 2025, 09_59_30 PM.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <style>
@@ -99,7 +100,7 @@
     const submitBtn = document.getElementById('submit');
     submitBtn.style.cursor = "not-allowed"
     submitBtn.style.backgroundColor = "gray"
-    
+    submitBtn.textContent = "Logging In...";
     try {
   const credential = await signInWithEmailAndPassword(auth, email, password);
 
@@ -112,7 +113,7 @@
   // ✅ Save displayName from Firebase
   localStorage.setItem("novaWalletUsername", credential.user.displayName || "User");
 
-  alert("Login successful!");
+  showError("✅Login successful!");
   loginForm.reset();
   window.location.href = "./dashboard.html";
 

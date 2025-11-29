@@ -94,6 +94,7 @@ signupForm.addEventListener('submit', async (e) => {
   const submitBtn = document.getElementById('submit');
   submitBtn.style.cursor = "not-allowed"
   submitBtn.style.backgroundColor = "gray"
+  submitBtn.textContent = "Signing In...";
 
   try {
     const credential = await createUserWithEmailAndPassword(auth, email, password);

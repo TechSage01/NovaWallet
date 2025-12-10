@@ -56,6 +56,51 @@
       border-radius: 50%;
       object-fit: cover;
     }
+    /* Layout for forms and chart */
+    .quick-actions, .transactions-section, .chart-section {
+      padding: 20px 30px;
+      background: #fff;
+      margin: 16px 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+    }
+
+    .income-form, .expense-form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .income-form input, .expense-form input, .expense-form select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #e6e9ef;
+      font-size: 0.95rem;
+    }
+
+    .action-btn {
+      background: #6c5ce7;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .chart-container { max-width: 720px; margin: 0 auto; }
+    .chart-section h2 { margin-bottom: 12px; }
+
+    .transactions-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+    .transaction-item { display:flex; align-items:center; gap:12px; padding:10px; border-radius:10px; border:1px solid #f0f2f5; }
+    .transaction-icon { width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:#f6f7fb; border-radius:8px; }
+    .transaction-details h4 { margin:0; font-size:1rem; }
+    .transaction-details p { margin:0; font-size:0.85rem; color:#7b8087; }
+    .transaction-amount { margin-left:auto; font-weight:700; }
+    .transaction-item.negative { border-left: 4px solid #e17055; }
+    .transaction-item.positive { border-left: 4px solid #00b894; }
+    .delete-btn { background: transparent; border: none; color:#b71c1c; cursor:pointer; margin-left:8px; }
   </style>
 </head>
 <body>
@@ -108,10 +153,13 @@
       </div>
     </div>
 
+    
+
     <!-- INCOME SECTION -->
     <div class="quick-actions">
       <h2>Add Income</h2>
       <div class="income-form">
+        <input type="text" id="incomeSource" placeholder="From (Person / Source)" />
         <input type="number" id="incomeAmount" placeholder="Enter income amount" min="0" step="0.01"/>
         <button id="addIncomeBtn" class="action-btn"><i class="fas fa-plus"></i> Add Income</button>
       </div>
@@ -122,6 +170,14 @@
       <div class="section-header"><h2>Add Expense</h2></div>
       <div class="expense-form">
         <input type="text" id="expenseDescription" placeholder="Expense description"/>
+        <select id="expenseCategory">
+          <option value="Other">Other</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Bills">Bills</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Entertainment">Entertainment</option>
+        </select>
         <input type="number" id="expenseAmount" placeholder="Amount" min="0" step="0.01"/>
         <button id="addExpenseBtn" class="action-btn"><i class="fas fa-plus"></i> Add Expense</button>
       </div>
@@ -133,7 +189,16 @@
       <div class="transactions-list" id="expenseList"></div>
     </div>
   </div>
+  <!-- CHART: Expense breakdown -->
+    <div class="chart-section">
+      <h2>Spending Breakdown</h2>
+      <div class="chart-container">
+        <canvas id="expenseChart" width="400" height="220"></canvas>
+      </div>
+    </div>
+  
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
@@ -153,19 +218,20 @@
 
     let currentUser = null;
     let storedUsername = null;
-    let balance = 0;
-    let totalIncome = 0;
-    let expenses = [];
+    let transactions = []; // both incomes and expenses
 
     const welcomeMessage = document.getElementById("welcomeMessage");
     const logoutBtn = document.getElementById("logoutBtn");
     const balanceElement = document.getElementById("balance");
     const addIncomeBtn = document.getElementById("addIncomeBtn");
     const incomeAmount = document.getElementById("incomeAmount");
+    const incomeSource = document.getElementById("incomeSource");
     const addExpenseBtn = document.getElementById("addExpenseBtn");
     const expenseDescription = document.getElementById("expenseDescription");
+    const expenseCategory = document.getElementById("expenseCategory");
     const expenseAmount = document.getElementById("expenseAmount");
     const expenseList = document.getElementById("expenseList");
+    const expenseChartCanvas = document.getElementById("expenseChart");
 
     // PROFILE ELEMENTS
     const profileInput = document.getElementById("profileInput");
@@ -196,8 +262,9 @@
       reader.readAsDataURL(file);
     });
 
-            // welcome message 
-            
+    // Chart state
+    let expenseChart = null;
+
     onAuthStateChanged(auth, (user) => {
       if (!user) return window.location.href = "login.html";
       currentUser = user;
@@ -207,78 +274,126 @@
     });
 
     function loadUserData() {
-      balance = parseFloat(localStorage.getItem(`${storedUsername}_balance`)) || 0;
-      totalIncome = parseFloat(localStorage.getItem(`${storedUsername}_totalIncome`)) || 0;
-      expenses = JSON.parse(localStorage.getItem(`${storedUsername}_expenses`)) || [];
+      transactions = JSON.parse(localStorage.getItem(`${storedUsername}_transactions`)) || [];
       updateBalance();
-      updateExpenseList();
+      updateTransactionList();
+      updateChart();
+    }
+
+    function saveTransactions() {
+      localStorage.setItem(`${storedUsername}_transactions`, JSON.stringify(transactions));
     }
 
     function updateBalance() {
-      balanceElement.textContent = `$${balance.toFixed(2)}`;
-      localStorage.setItem(`${storedUsername}_balance`, balance.toString());
-      localStorage.setItem(`${storedUsername}_totalIncome`, totalIncome.toString());
+      const total = transactions.reduce((acc, t) => {
+        return t.type === 'income' ? acc + t.amount : acc - t.amount;
+      }, 0);
+      balanceElement.textContent = `$${total.toFixed(2)}`;
+      localStorage.setItem(`${storedUsername}_balance`, total.toString());
     }
 
-    function updateExpenseList() {
+    function updateTransactionList() {
       expenseList.innerHTML = "";
-      expenses.forEach((expense, index) => {
-        const expenseItem = document.createElement("div");
-        expenseItem.className = "transaction-item";
-        expenseItem.innerHTML = `
-          <div class="transaction-icon"><i class="fas fa-shopping-cart"></i></div>
+      transactions.slice().reverse().forEach((tx, revIndex) => {
+        // show most recent first; compute actual index
+        const index = transactions.length - 1 - revIndex;
+        const item = document.createElement('div');
+        item.className = `transaction-item ${tx.type === 'income' ? 'positive' : 'negative'}`;
+        item.innerHTML = `
+          <div class="transaction-icon"><i class="fas ${tx.type === 'income' ? 'fa-hand-holding-usd' : 'fa-shopping-cart'}"></i></div>
           <div class="transaction-details">
-            <h4>${expense.description}</h4>
-            <p>${new Date(expense.date).toLocaleDateString()}</p>
+            <h4>${tx.description || (tx.type === 'income' ? 'Income' : 'Expense')}</h4>
+            <p>${new Date(tx.date).toLocaleString()} • ${tx.type === 'expense' ? tx.category : 'Source: ' + (tx.source || '—')}</p>
           </div>
-          <div class="transaction-amount negative">$${expense.amount.toFixed(2)}</div>
+          <div class="transaction-amount">${tx.type === 'income' ? '+' : '-'}$${tx.amount.toFixed(2)}</div>
           <button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i></button>
         `;
-        expenseList.appendChild(expenseItem);
+        expenseList.appendChild(item);
       });
-      localStorage.setItem(`${storedUsername}_expenses`, JSON.stringify(expenses));
+      saveTransactions();
     }
 
-    addIncomeBtn.addEventListener("click", () => {
+    function updateChart() {
+      // Aggregate expense categories
+      const expenseTx = transactions.filter(t => t.type === 'expense');
+      const byCat = {};
+      expenseTx.forEach(e => {
+        byCat[e.category] = (byCat[e.category] || 0) + e.amount;
+      });
+      const labels = Object.keys(byCat);
+      const data = labels.map(l => byCat[l]);
+
+      if (!expenseChart) {
+        expenseChart = new Chart(expenseChartCanvas.getContext('2d'), {
+          type: 'pie',
+          data: {
+            labels,
+            datasets: [{
+              data,
+              backgroundColor: [
+                '#6c5ce7', '#fd79a8', '#00b894', '#0984e3', '#e17055', '#00cec9'
+              ],
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+      } else {
+        expenseChart.data.labels = labels;
+        expenseChart.data.datasets[0].data = data;
+        expenseChart.update();
+      }
+    }
+
+    addIncomeBtn.addEventListener('click', () => {
       const amount = parseFloat(incomeAmount.value);
+      const source = incomeSource.value.trim();
       if (amount > 0) {
-        balance += amount;
-        totalIncome += amount;
+        const tx = { type: 'income', description: source || 'Income', source: source || 'Unknown', amount, date: new Date().toISOString() };
+        transactions.push(tx);
         updateBalance();
-        incomeAmount.value = "";
-        alert("Income added successfully!");
-      } else alert("Please enter a valid income amount.");
+        updateTransactionList();
+        updateChart();
+        incomeAmount.value = '';
+        incomeSource.value = '';
+        alert('Income added successfully!');
+      } else alert('Please enter a valid income amount.');
     });
 
-    addExpenseBtn.addEventListener("click", () => {
+    addExpenseBtn.addEventListener('click', () => {
       const description = expenseDescription.value.trim();
+      const category = expenseCategory.value || 'Other';
       const amount = parseFloat(expenseAmount.value);
       if (description && amount > 0) {
-        expenses.push({ description, amount, date: new Date().toISOString() });
-        balance -= amount;
+        const tx = { type: 'expense', description, category, amount, date: new Date().toISOString() };
+        transactions.push(tx);
         updateBalance();
-        updateExpenseList();
-        expenseDescription.value = "";
-        expenseAmount.value = "";
-        alert("Expense added successfully!");
-      } else alert("Please enter a valid description and amount.");
+        updateTransactionList();
+        updateChart();
+        expenseDescription.value = '';
+        expenseAmount.value = '';
+        expenseCategory.value = 'Other';
+        alert('Expense added successfully!');
+      } else alert('Please enter a valid description and amount.');
     });
 
-    expenseList.addEventListener("click", (e) => {
-      const btn = e.target.closest(".delete-btn");
+    expenseList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.delete-btn');
       if (!btn) return;
-      const index = btn.dataset.index;
-      const expense = expenses[index];
-      if (confirm(`Are you sure you want to delete "${expense.description}" for $${expense.amount.toFixed(2)}?`)) {
-        balance += expense.amount;
-        expenses.splice(index, 1);
+      const index = parseInt(btn.dataset.index, 10);
+      const tx = transactions[index];
+      if (confirm(`Delete "${tx.description}" ${tx.type === 'income' ? 'income' : 'expense'} for $${tx.amount.toFixed(2)}?`)) {
+        transactions.splice(index, 1);
         updateBalance();
-        updateExpenseList();
-        alert("Expense deleted successfully!");
+        updateTransactionList();
+        updateChart();
       }
     });
 
-    logoutBtn.addEventListener("click", () => {
+    logoutBtn.addEventListener('click', () => {
       if (confirm(`${storedUsername}, are you sure you want to log out?`)) {
         localStorage.removeItem("novaWalletUsername");
         localStorage.removeItem("LoggedInUser");
